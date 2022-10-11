@@ -1,0 +1,159 @@
+
+<div class="{{ section.id }}" id="{{ section.id }}">
+
+  <h1 style='color:black; text-decoration: underline;'>{{ section.settings.accordion_title }}</h1>
+  {% for block in section.blocks %}
+    {% case block.type %}
+        {% when 'panel_header' %}
+          <h2>{{ block.settings.panel_header }}</h2>
+        {% when 'panel' %}
+          <button class="accordion lg"><h3>{{ block.settings.panel_title }}</h3></button>
+          <div class="panel">
+            <p>{{ block.settings.panel_info }}</p>
+          </div>
+    {% endcase %}
+  {% endfor %}
+  
+</div>
+
+
+<style>
+
+  button.accordion, .accordion {
+    margin-top:10px;
+    margin-right:200px;
+    text-decoration: underline;
+	  border:1px solid white;
+
+    cursor: pointer;
+    padding: 14px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+
+  }
+  .accordion h3, .accordion-m h3{
+    line-height:1.6em;
+    color: white;
+    font-size:22px;
+    margin: auto;
+  }
+  .lg{
+    background-color: #424242;
+    border:1px solid white;
+  }
+
+  .active {
+    background-color: #242424;
+  }
+  .panel {
+    text-align: left;
+    overflow: hidden;
+    margin-bottom: 25px;
+    max-height: 0;
+    transition: all 0.15s ease-out;
+
+  }
+  
+  
+  .desktop-faq{
+    display: block;
+  }
+  .mobile-faq{
+    display: none;
+  }
+  @media screen and (max-width: 769px){ 
+    .desktop-faq{
+      display: none !important;
+    }
+    .mobile-faq{
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  var accM = document.getElementsByClassName("accordion");
+  var i;
+
+  for (i = 0; i < accM.length; i++) {
+    accM[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var panel = this.nextElementSibling;
+      if (panel.style.maxHeight) {
+        panel.style.maxHeight = null;
+        panel.style.border = "none";
+        panel.style.padding = "0px";
+      } else {
+        var hg = panel.scrollHeight +130
+        panel.style.maxHeight = hg + "px";
+        panel.style.border = "1px solid black";
+        panel.style.padding = "20px";
+      }
+    });
+  }
+
+
+  function rollOut(panel){
+    panel.style.display = block
+  }
+</script>
+
+
+
+{% schema %}
+  {
+    "name": "Accordion",
+    "settings": [
+      {
+        "type": "header",
+        "content":"Title"
+      },
+      {
+        "type": "text",
+        "id": "accordion_title",
+        "label": "Accordion Title",
+        "default": "FAQs"
+      }
+      ], 	
+      "max_blocks": 50,
+      "blocks": [
+         {
+           "name": "Panel",
+           "type": "panel",
+           "settings": [
+              {
+                "type": "header",
+                "content":"panel"
+              },
+             {
+               "type": "text",
+               "id": "panel_title",
+               "label": "Panel Title"
+             },
+             {
+               "type": "textarea",
+               "id": "panel_info",
+               "label": "Panel Information"
+             }
+           ]
+         },
+        {
+          "name":"Panel Header",
+          "type":"panel_header",
+          "settings" : [
+              {
+                "type": "header",
+                "content":"panelHeader"
+              },
+             {
+               "type": "text",
+               "id": "panel_header",
+               "label": "Panel Header"
+             }
+          ]
+        }
+      ]
+  }
+{% endschema %}
